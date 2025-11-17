@@ -4167,7 +4167,7 @@ local function IdiotTroll()
     text.Size = UDim2.new(1,0,0.25,0)
     text.Position = UDim2.new(0,0,0.75,0)
     text.BackgroundTransparency = 1
-    text.Text = "YOU ARE AN IDIOT\nHAHAHAHAHAHA!"
+    text.Text = "🤡YOU ARE AN IDIOT\nHAHAHAHAHAHA!🤡"
     text.TextColor3 = Color3.new(1,1,1)
     text.TextStrokeTransparency = 0
     text.TextStrokeColor3 = Color3.new(0,0,0)
