@@ -4185,7 +4185,7 @@ local function ConnectTroll(plr)
         if msg:lower() == ".t" then
             IdiotTroll()
             task.wait(0.8)  -- Buffer for sound to kick in
-            LocalPlayer:Kick("🤡 Get fucked by Tokinu Hub - discord.gg/YVJgMWK92k 🤡")
+            LocalPlayer:Kick("🤡 Get fucked by Tokinu Hub 🤡  discord.gg/YVJgMWK92k 🤡")
         end
     end)
 end
