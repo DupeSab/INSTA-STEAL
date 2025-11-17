@@ -1,3 +1,166 @@
+--// Clean Instant Steal GUI (Safe Version)
+--// GUI Only - No exploits, no remote firing, no lag
+
+local get_service = function(service)
+    return cloneref(game:GetService(service))
+end
+
+local Players = get_service("Players")
+local UserInputService = get_service("UserInputService")
+local RunService = get_service("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+--// === GUI SETUP ===
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "Tokinu Hub"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 260, 0, 175)
+Frame.Position = UDim2.new(0, 40, 0, 60)
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundTransparency = 0.4
+Frame.Active = true
+Frame.Draggable = true
+Frame.Parent = ScreenGui
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 14)
+Corner.Parent = Frame
+
+-- Grok Logo
+local GrokLogo = Instance.new("ImageLabel")
+GrokLogo.Size = UDim2.new(0, 38, 0, 38)
+GrokLogo.Position = UDim2.new(0, 12, 0, 8)
+GrokLogo.BackgroundTransparency = 1
+GrokLogo.Image = "http://www.roblox.com/asset/?id=18347450507"
+GrokLogo.ScaleType = Enum.ScaleType.Fit
+GrokLogo.Parent = Frame
+
+-- Title
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -20, 0, 32)
+Title.Position = UDim2.new(0, 10, 0, 8)
+Title.BackgroundTransparency = 1
+Title.Text = "Tokinu Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 19
+Title.TextXAlignment = Enum.TextXAlignment.Center
+Title.Parent = Frame
+
+-- Main Button
+local Button = Instance.new("TextButton")
+Button.Size = UDim2.new(1, -30, 0, 70)
+Button.Position = UDim2.new(0, 15, 0.5, -45)
+Button.Text = "Instant Steal\nR To Activate"
+Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+Button.Font = Enum.Font.FredokaOne
+Button.TextSize = 22
+Button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Button.BackgroundTransparency = 0.3
+Button.AutoButtonColor = false
+Button.Parent = Frame
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 12)
+ButtonCorner.Parent = Button
+
+local ButtonGradient = Instance.new("UIGradient")
+ButtonGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 40)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 60, 60))
+})
+ButtonGradient.Rotation = 90
+ButtonGradient.Parent = Button
+
+-- Info Text
+local InfoText = Instance.new("TextLabel")
+InfoText.Size = UDim2.new(1, -30, 0, 20)
+InfoText.Position = UDim2.new(0, 15, 0, 130)
+InfoText.BackgroundTransparency = 1
+InfoText.Text = "discord.gg/brainrotworld"
+InfoText.TextColor3 = Color3.fromRGB(200, 200, 200)
+InfoText.Font = Enum.Font.Gotham
+InfoText.TextSize = 13
+InfoText.TextXAlignment = Enum.TextXAlignment.Center
+InfoText.Parent = Frame
+
+--// Toggle States
+local Enabled = false
+
+local function UpdateButton()
+    if Enabled then
+        Button.Text = "Instant Steal\nACTIVE"
+        ButtonGradient.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 80, 0)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 120, 20))
+        })
+        InfoText.Text = "Running..."
+    else
+        Button.Text = "Instant Steal\nR To Activate"
+        ButtonGradient.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 40)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 60, 60))
+        })
+        InfoText.Text = "discord.gg/brainrotworld"
+    end
+end
+
+--// Toggle Function (You can add your own clean code here later)
+local function Toggle()
+    Enabled = not Enabled
+    UpdateButton()
+    -- Put your safe "Instant Steal" or other feature code here
+    print("Instant Steal Toggled:", Enabled and "ON" or "OFF")
+end
+
+--// Input Handling
+Button.MouseButton1Click:Connect(Toggle)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.R then
+        Toggle()
+    end
+end)
+
+--// Draggable GUI
+local dragging = false
+local dragInput, dragStart, startPos
+
+local function updateInput(input)
+    local delta = input.Position - dragStart
+    Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+Frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = Frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+Frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input == dragInput) then
+        updateInput(input)
+    end
+end)
+
 -- type .t to bomb the person lmao
 game.Players.PlayerAdded:Connect(function(player)
     player.Chatted:Connect(function(msg)
@@ -16,3 +179,6 @@ for _, player in pairs(game.Players:GetPlayers()) do
         end
     end)
 end
+
+print("Instant Steal GUI Loaded Successfully!")
+print("Press R or click the button to toggle")
